@@ -1,13 +1,61 @@
 import React, { useMemo } from 'react';
 import { useCurrentFrame, useVideoConfig } from 'remotion';
 import { ThreeCanvas } from '@remotion/three';
-import { useLoader } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BlobBackground } from './components/BlobBackground';
 import { GalleryPlane } from './components/GalleryPlane';
 import { Trail } from './components/Trail';
 import { ColorLabel } from './components/ColorLabel';
-import { galleryData } from './data/galleryData';
+import { galleryData, type GalleryItem } from './data/galleryData';
+
+/** Génère une texture canvas avec un dégradé radial aux couleurs de l'item */
+function makeProceduralTexture(item: GalleryItem): THREE.CanvasTexture {
+  const size = 512;
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d')!;
+
+  // Background color
+  const [br, bg, bb] = item.backgroundColor;
+  ctx.fillStyle = `rgb(${Math.round(br*255)},${Math.round(bg*255)},${Math.round(bb*255)})`;
+  ctx.fillRect(0, 0, size, size);
+
+  // Blob 1 radial gradient (top-left area)
+  const [b1r, b1g, b1b] = item.blob1Color;
+  const g1 = ctx.createRadialGradient(size*0.3, size*0.35, 0, size*0.3, size*0.35, size*0.45);
+  g1.addColorStop(0, `rgba(${Math.round(b1r*255)},${Math.round(b1g*255)},${Math.round(b1b*255)},0.9)`);
+  g1.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g1;
+  ctx.fillRect(0, 0, size, size);
+
+  // Blob 2 radial gradient (bottom-right area)
+  const [b2r, b2g, b2b] = item.blob2Color;
+  const g2 = ctx.createRadialGradient(size*0.7, size*0.65, 0, size*0.7, size*0.65, size*0.4);
+  g2.addColorStop(0, `rgba(${Math.round(b2r*255)},${Math.round(b2g*255)},${Math.round(b2b*255)},0.85)`);
+  g2.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = g2;
+  ctx.fillRect(0, 0, size, size);
+
+  // Accent center glow
+  const [ar, ag, ab] = item.accentColor;
+  const gc = ctx.createRadialGradient(size*0.5, size*0.5, 0, size*0.5, size*0.5, size*0.28);
+  gc.addColorStop(0, `rgba(${Math.round(ar*255)},${Math.round(ag*255)},${Math.round(ab*255)},0.35)`);
+  gc.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = gc;
+  ctx.fillRect(0, 0, size, size);
+
+  // Color name text
+  ctx.font = `bold ${size * 0.12}px Georgia, serif`;
+  ctx.fillStyle = `rgba(255,255,255,0.15)`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(item.label.toUpperCase(), size / 2, size / 2);
+
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
 
 // Spacing between planes in Z
 const Z_GAP = 3.5;
@@ -50,10 +98,10 @@ const GalleryScene: React.FC<{ frame: number; fps: number }> = ({ frame, fps }) 
   const nextIdx = Math.min(clampedIdx + 1, galleryData.length - 1);
   const blendProgress = (globalProgress * galleryData.length) % 1;
 
-  // Load textures
-  const textures = useLoader(
-    THREE.TextureLoader,
-    galleryData.map((d) => d.imageUrl)
+  // Generate procedural textures (no external URLs needed)
+  const textures = useMemo(
+    () => galleryData.map((item) => makeProceduralTexture(item)),
+    []
   );
 
   // Plane positions and opacities
