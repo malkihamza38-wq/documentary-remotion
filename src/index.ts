@@ -1,2 +1,4 @@
-export { DocumentaryMain } from './Root';
-export { DepthGalleryScene } from './depth/DepthGalleryScene';
+import { registerRoot } from 'remotion';
+import { DocumentaryMain } from './Root';
+
+registerRoot(DocumentaryMain);
