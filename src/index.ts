@@ -1,0 +1,1 @@
+export { DocumentaryMain } from './Root';
