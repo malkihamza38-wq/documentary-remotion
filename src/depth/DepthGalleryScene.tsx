@@ -6,6 +6,7 @@ import { BlobBackground } from './components/BlobBackground';
 import { GalleryPlane } from './components/GalleryPlane';
 import { Trail } from './components/Trail';
 import { ColorLabel } from './components/ColorLabel';
+import { LightSweep } from './components/LightSweep';
 import { galleryData, type GalleryItem } from './data/galleryData';
 
 /** Génère une texture canvas avec un dégradé radial aux couleurs de l'item */
@@ -199,6 +200,9 @@ export const DepthGalleryScene: React.FC<Props> = () => {
       >
         <GalleryScene frame={frame} fps={fps} />
       </ThreeCanvas>
+
+      {/* Light sweep en boucle */}
+      <LightSweep loopFrames={150} angle={-25} color="180, 60, 255" opacity={0.85} />
 
       {/* HTML overlay: color label */}
       <ColorLabel

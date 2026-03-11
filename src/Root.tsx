@@ -2,6 +2,7 @@ import React from 'react';
 import { Composition } from 'remotion';
 import { DocumentaryVideo } from './compositions/DocumentaryVideo';
 import { DepthGalleryScene } from './depth/DepthGalleryScene';
+import { LightSweepDemo } from './depth/LightSweepDemo';
 import { galleryData } from './depth/data/galleryData';
 
 // 5 images × 90 frames = 450 frames @ 30fps = 15 secondes
@@ -15,6 +16,17 @@ export const DocumentaryMain: React.FC = () => {
         id="DepthGallery"
         component={DepthGalleryScene}
         durationInFrames={DEPTH_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* ── Light Sweep démo ──────────────────────────────────── */}
+      <Composition
+        id="LightSweepDemo"
+        component={LightSweepDemo}
+        durationInFrames={300}
         fps={30}
         width={1920}
         height={1080}
