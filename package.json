@@ -5,18 +5,24 @@
   "scripts": {
     "start": "remotion studio",
     "build": "remotion render",
-    "render": "remotion render DocumentaryMain out/video.mp4"
+    "render": "remotion render DocumentaryMain out/video.mp4",
+    "render:depth": "remotion render DepthGallery out/depth.mp4"
   },
   "dependencies": {
     "@remotion/cli": "4.0.237",
     "@remotion/player": "4.0.237",
+    "@remotion/three": "4.0.237",
+    "@react-three/fiber": "8.17.10",
+    "@react-three/drei": "9.122.0",
     "remotion": "4.0.237",
     "react": "18.3.1",
-    "react-dom": "18.3.1"
+    "react-dom": "18.3.1",
+    "three": "0.168.0"
   },
   "devDependencies": {
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.1",
+    "@types/three": "0.168.0",
     "typescript": "5.4.5"
   },
   "remotion": {

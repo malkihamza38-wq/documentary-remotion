@@ -1,25 +1,43 @@
+import React from 'react';
 import { Composition } from 'remotion';
 import { DocumentaryVideo } from './compositions/DocumentaryVideo';
+import { DepthGalleryScene } from './depth/DepthGalleryScene';
+import { galleryData } from './depth/data/galleryData';
+
+// 5 images × 90 frames = 450 frames @ 30fps = 15 secondes
+const DEPTH_DURATION = galleryData.length * 90;
 
 export const DocumentaryMain: React.FC = () => {
   return (
     <>
+      {/* ── Depth Gallery (effet Codrops) ─────────────────────── */}
+      <Composition
+        id="DepthGallery"
+        component={DepthGalleryScene}
+        durationInFrames={DEPTH_DURATION}
+        fps={30}
+        width={1920}
+        height={1080}
+        defaultProps={{}}
+      />
+
+      {/* ── Documentary classique ─────────────────────────────── */}
       <Composition
         id="DocumentaryMain"
         component={DocumentaryVideo}
-        durationInFrames={30 * 60} // 60 secondes à 30fps
+        durationInFrames={30 * 60}
         fps={30}
         width={1920}
         height={1080}
         defaultProps={{
-          title: 'Le Secret de l\'Univers',
-          subtitle: 'Un voyage au cœur de l\'espace',
+          title: "Le Secret de l'Univers",
+          subtitle: "Un voyage au cœur de l'espace",
           scenes: [
             {
               id: 'intro',
               type: 'title',
-              text: 'Le Secret de l\'Univers',
-              subtitle: 'Un voyage au cœur de l\'espace',
+              text: "Le Secret de l'Univers",
+              subtitle: "Un voyage au cœur de l'espace",
               duration: 150,
             },
             {
@@ -32,7 +50,7 @@ export const DocumentaryMain: React.FC = () => {
             {
               id: 'fact1',
               type: 'fact',
-              text: 'L\'univers observable contient plus de 2 trillions de galaxies.',
+              text: "L'univers observable contient plus de 2 trillions de galaxies.",
               duration: 150,
             },
             {
@@ -45,21 +63,21 @@ export const DocumentaryMain: React.FC = () => {
             {
               id: 'narration1',
               type: 'narration',
-              text: 'Il y a 13,8 milliards d\'années, tout a commencé par une singularité d\'une densité et d\'une chaleur infinies. En une fraction de seconde, l\'univers est passé de rien à tout.',
+              text: "Il y a 13,8 milliards d'années, tout a commencé par une singularité d'une densité et d'une chaleur infinies. En une fraction de seconde, l'univers est passé de rien à tout.",
               duration: 240,
             },
             {
               id: 'stat1',
               type: 'stat',
               value: '13.8',
-              unit: 'milliards d\'années',
-              label: 'Âge de l\'univers',
+              unit: "milliards d'années",
+              label: "Âge de l'univers",
               duration: 150,
             },
             {
               id: 'outro',
               type: 'outro',
-              text: 'L\'exploration continue...',
+              text: "L'exploration continue...",
               duration: 150,
             },
           ],
@@ -68,5 +86,3 @@ export const DocumentaryMain: React.FC = () => {
     </>
   );
 };
-
-import React from 'react';
